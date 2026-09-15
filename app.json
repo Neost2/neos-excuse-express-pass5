@@ -1,0 +1,47 @@
+{
+  "expo": {
+    "name": "Neo's ExcuseExpress",
+    "slug": "neos-excuse-express",
+    "version": "0.4.0",
+    "orientation": "default",
+    "icon": "./assets/logo.png",
+    "scheme": "neosexcuse",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/logo.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#07182f"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "org.neostapps.neosexcuseexpress",
+      "infoPlist": {
+        "NSCameraUsageDescription": "Neo's ExcuseExpress uses the camera so you can photograph an absence document.",
+        "NSPhotoLibraryUsageDescription": "Neo's ExcuseExpress lets you select an absence document from your photo library.",
+        "NSPhotoLibraryAddUsageDescription": "Neo's ExcuseExpress can save a photo you take to your photo library."
+      }
+    },
+    "android": {
+      "package": "org.neostapps.neosexcuseexpress",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/logo.png",
+        "backgroundColor": "#07182f"
+      },
+      "permissions": ["CAMERA"]
+    },
+    "web": { "bundler": "metro", "favicon": "./assets/logo.png" },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Allow Neo's ExcuseExpress to choose a doctor's note from your photos.",
+          "cameraPermission": "Allow Neo's ExcuseExpress to photograph a doctor's note."
+        }
+      ],
+      "expo-media-library"
+    ],
+    "experiments": { "typedRoutes": true }
+  }
+}
