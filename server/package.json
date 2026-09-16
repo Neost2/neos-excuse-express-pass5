@@ -10,7 +10,9 @@
     "build": "tsc"
   },
   "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.1133.0",
     "@aws-sdk/client-sesv2": "^3.883.0",
+    "@aws-sdk/lib-dynamodb": "^3.1133.0",
     "cors": "^2.8.5",
     "dotenv": "^17.2.2",
     "express": "^5.1.0",

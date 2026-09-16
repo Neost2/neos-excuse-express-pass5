@@ -1,36 +1,119 @@
-import { ScrollView, StyleSheet, Text, View } from "react-native";
-import { Card } from "@/components/UI";
+import { useCallback, useEffect, useState } from "react";
+import {
+  ActivityIndicator,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+
+import { Btn, Card } from "@/components/UI";
 import { C } from "@/constants/theme";
-import { schools } from "@/data/schools";
+import { fetchSchools, type School } from "@/data/schools";
+
 export default function Schools() {
+  const [schools, setSchools] = useState<School[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const loadSchools = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const loaded = await fetchSchools();
+      setSchools(loaded);
+    } catch (err) {
+      console.error("Unable to load schools:", err);
+      setSchools([]);
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Unable to load verified schools.",
+      );
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadSchools();
+  }, [loadSchools]);
+
   return (
     <ScrollView contentContainerStyle={s.page}>
-      <Text style={s.note}>
-        Pass 4 uses demo routing addresses. Replace an address only after the
-        school or district confirms the correct front-office/attendance email.
-      </Text>
-      {schools.map((x) => (
-        <Card key={x.id}>
-          <View style={s.row}>
-            <Text style={s.h}>{x.name}</Text>
-            <Text
-              style={{
-                color: x.verified ? C.green : C.amber,
-                fontWeight: "900",
-              }}
-            >
-              {x.verified ? "VERIFIED" : "REVIEW"}
-            </Text>
+      <Card>
+        <Text style={s.h}>Verified Schools</Text>
+
+        <Text style={s.m}>
+          These are schools that have verified their attendance or front-office
+          email through Neo&apos;s ExcuseExpress.
+        </Text>
+
+        <Btn
+          title="Refresh Schools"
+          secondary
+          onPress={loadSchools}
+        />
+      </Card>
+
+      {loading ? (
+        <Card>
+          <View style={s.loading}>
+            <ActivityIndicator />
+            <Text style={s.m}>Loading verified schools...</Text>
           </View>
-          <Text style={s.m}>
-            {x.district} • {x.city}, {x.state}
-          </Text>
-          <Text style={s.email}>{x.email}</Text>
         </Card>
-      ))}
+      ) : error ? (
+        <Card>
+          <Text style={s.warn}>Could not load schools</Text>
+          <Text style={s.m}>{error}</Text>
+
+          <Btn
+            title="Try Again"
+            onPress={loadSchools}
+          />
+        </Card>
+      ) : schools.length === 0 ? (
+        <Card>
+          <Text style={s.h}>No verified schools yet</Text>
+
+          <Text style={s.m}>
+            A school will appear here after its registration email has been
+            verified.
+          </Text>
+        </Card>
+      ) : (
+        schools.map((school) => {
+          const location = [school.city, school.state]
+            .filter(Boolean)
+            .join(", ");
+
+          return (
+            <Card key={school.id}>
+              <View style={s.row}>
+                <View style={s.info}>
+                  <Text style={s.h}>{school.name}</Text>
+
+                  {school.district ? (
+                    <Text style={s.m}>{school.district}</Text>
+                  ) : null}
+
+                  {location ? (
+                    <Text style={s.m}>{location}</Text>
+                  ) : null}
+                </View>
+
+                <Text style={s.ok}>Verified</Text>
+              </View>
+            </Card>
+          );
+        })
+      )}
     </ScrollView>
   );
 }
+
 const s = StyleSheet.create({
   page: {
     padding: 20,
@@ -39,9 +122,42 @@ const s = StyleSheet.create({
     width: "100%",
     alignSelf: "center",
   },
-  note: { color: C.muted, lineHeight: 20 },
-  row: { flexDirection: "row", justifyContent: "space-between", gap: 12 },
-  h: { color: C.text, fontSize: 18, fontWeight: "900" },
-  m: { color: C.muted },
-  email: { color: C.cyan },
+
+  row: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+  },
+
+  info: {
+    flex: 1,
+    gap: 4,
+  },
+
+  loading: {
+    alignItems: "center",
+    gap: 10,
+    paddingVertical: 10,
+  },
+
+  h: {
+    color: C.text,
+    fontSize: 20,
+    fontWeight: "900",
+  },
+
+  m: {
+    color: C.muted,
+    lineHeight: 20,
+  },
+
+  ok: {
+    color: C.green,
+    fontWeight: "900",
+  },
+
+  warn: {
+    color: C.amber,
+    fontWeight: "900",
+  },
 });

@@ -1,0 +1,102 @@
+{
+    "taskDefinitionArn": "arn:aws:ecs:us-east-1:926389550467:task-definition/default-neo-excuse-api:8",
+    "containerDefinitions": [
+        {
+            "name": "Main",
+            "image": "926389550467.dkr.ecr.us-east-1.amazonaws.com/neos-excuse-api@sha256:c5f3b4ae8858c8b14c9c7efb6f43d2b5e1ca2333f1f1d40f822347cf6545af63",
+            "cpu": 1024,
+            "memory": 2048,
+            "memoryReservation": 2048,
+            "portMappings": [
+                {
+                    "containerPort": 8080,
+                    "hostPort": 8080,
+                    "protocol": "tcp",
+                    "name": "main-8080-tcp"
+                }
+            ],
+            "essential": true,
+            "command": [],
+            "environment": [
+                {
+                    "name": "MAIL_MODE",
+                    "value": "ses"
+                },
+                {
+                    "name": "SES_FROM_EMAIL",
+                    "value": "excuses@neostapps.org"
+                },
+                {
+                    "name": "AWS_REGION",
+                    "value": "us-east-1"
+                }
+            ],
+            "mountPoints": [],
+            "volumesFrom": [],
+            "secrets": [],
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "/aws/ecs/default/neo-excuse-api-5a58",
+                    "awslogs-region": "us-east-1",
+                    "awslogs-stream-prefix": "ecs"
+                }
+            },
+            "systemControls": []
+        }
+    ],
+    "family": "default-neo-excuse-api",
+    "taskRoleArn": "arn:aws:iam::926389550467:role/NeoExcuseSESTaskRole",
+    "executionRoleArn": "arn:aws:iam::926389550467:role/NeoExcuseSESTaskRole",
+    "networkMode": "awsvpc",
+    "revision": 8,
+    "volumes": [],
+    "status": "ACTIVE",
+    "requiresAttributes": [
+        {
+            "name": "com.amazonaws.ecs.capability.logging-driver.awslogs"
+        },
+        {
+            "name": "ecs.capability.execution-role-awslogs"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.ecr-auth"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.docker-remote-api.1.19"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.docker-remote-api.1.21"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.task-iam-role"
+        },
+        {
+            "name": "ecs.capability.execution-role-ecr-pull"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.docker-remote-api.1.18"
+        },
+        {
+            "name": "ecs.capability.task-eni"
+        }
+    ],
+    "placementConstraints": [],
+    "compatibilities": [
+        "EC2",
+        "FARGATE",
+        "MANAGED_INSTANCES"
+    ],
+    "runtimePlatform": {
+        "cpuArchitecture": "X86_64",
+        "operatingSystemFamily": "LINUX"
+    },
+    "requiresCompatibilities": [
+        "FARGATE"
+    ],
+    "cpu": "1024",
+    "memory": "2048",
+    "registeredAt": "2026-09-15T21:42:19.536000-05:00",
+    "registeredBy": "arn:aws:iam::926389550467:user/neost-dev-cli",
+    "enableFaultInjection": false
+}
