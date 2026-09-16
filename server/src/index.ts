@@ -18,12 +18,12 @@ const schools: Record<
 > = {
   "wagoner-hs": {
     name: "Wagoner High School",
-    email: "DEMO-attendance@school.example",
+    email: "neost2@hotmail.com",
     verified: true,
   },
   "wagoner-ms": {
     name: "Wagoner Middle School",
-    email: "DEMO-frontdesk@school.example",
+    email: "neost2@hotmail.com",
     verified: true,
   },
 };

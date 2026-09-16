@@ -14,7 +14,7 @@ export const schools: School[] = [
     district: "Wagoner Public Schools",
     city: "Wagoner",
     state: "OK",
-    email: "DEMO-attendance@school.example",
+    email: "neost2@hotmail.com",
     verified: true,
   },
   {
@@ -23,7 +23,7 @@ export const schools: School[] = [
     district: "Wagoner Public Schools",
     city: "Wagoner",
     state: "OK",
-    email: "DEMO-frontdesk@school.example",
+    email: "neost2@hotmail.com",
     verified: true,
   },
   {
@@ -32,7 +32,7 @@ export const schools: School[] = [
     district: "Demo Public Schools",
     city: "Demo City",
     state: "OK",
-    email: "DEMO-office@school.example",
+    email: "neost2@hotmail.com",
     verified: false,
   },
 ];
