@@ -1,0 +1,62 @@
+{
+  "containerDefinitions": [
+    {
+      "name": "Main",
+      "image": "926389550467.dkr.ecr.us-east-1.amazonaws.com/neos-excuse-api@sha256:9e6319c9be0441956575eaae60fac55c08fc13f4247af37cc7d32fd172b59e1d",
+      "cpu": 1024,
+      "memory": 2048,
+      "memoryReservation": 2048,
+      "portMappings": [
+        {
+          "containerPort": 8080,
+          "hostPort": 8080,
+          "protocol": "tcp",
+          "name": "main-8080-tcp"
+        }
+      ],
+      "essential": true,
+      "command": [],
+      "environment": [
+        {
+          "name": "MAIL_MODE",
+          "value": "ses"
+        },
+        {
+          "name": "SES_FROM_EMAIL",
+          "value": "excuses@neostapps.org"
+        },
+        {
+          "name": "AWS_REGION",
+          "value": "us-east-1"
+        }
+      ],
+      "mountPoints": [],
+      "volumesFrom": [],
+      "secrets": [],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/aws/ecs/default/neo-excuse-api-5a58",
+          "awslogs-region": "us-east-1",
+          "awslogs-stream-prefix": "ecs"
+        }
+      }
+    }
+  ],
+  "family": "default-neo-excuse-api",
+  "taskRoleArn": "arn:aws:iam::926389550467:role/NeoExcuseSESTaskRole",
+  "executionRoleArn": "arn:aws:iam::926389550467:role/NeoExcuseSESTaskRole",
+  "networkMode": "awsvpc",
+  "volumes": [],
+  "placementConstraints": [],
+  "runtimePlatform": {
+    "cpuArchitecture": "X86_64",
+    "operatingSystemFamily": "LINUX"
+  },
+  "requiresCompatibilities": [
+    "FARGATE"
+  ],
+  "cpu": "1024",
+  "memory": "2048",
+  "enableFaultInjection": false
+}
