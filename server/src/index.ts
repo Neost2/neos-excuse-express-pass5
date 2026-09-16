@@ -71,25 +71,25 @@ type SchoolRecord = {
  * IMPORTANT: These are still your TEST destinations.
  * Replace/remove them before production launch.
  */
-const legacySchools: Record<
-  string,
-  { id: string; name: string; email: string; verified: boolean; active: boolean }
-> = {
-  "wagoner-hs": {
-    id: "wagoner-hs",
-    name: "Wagoner High School",
-    email: "neost2@hotmail.com",
-    verified: true,
-    active: true,
-  },
-  "wagoner-ms": {
-    id: "wagoner-ms",
-    name: "Wagoner Middle School",
-    email: "neost2@hotmail.com",
-    verified: true,
-    active: true,
-  },
-};
+// const legacySchools: Record<
+//   string,
+//   { id: string; name: string; email: string; verified: boolean; active: boolean }
+// > = {
+//   "wagoner-hs": {
+//     id: "wagoner-hs",
+//     name: "Wagoner High School",
+//     email: "neost2@hotmail.com",
+//     verified: true,
+//     active: true,
+//   },
+//   "wagoner-ms": {
+//     id: "wagoner-ms",
+//     name: "Wagoner Middle School",
+//     email: "neost2@hotmail.com",
+//     verified: true,
+//     active: true,
+//   },
+// };
 
 function normalizeEmail(value: string) {
   return value.trim().toLowerCase();
@@ -177,18 +177,6 @@ async function getSchoolRecord(id: string): Promise<SchoolRecord | null> {
 }
 
 async function getSchoolForSending(id: string) {
-  const legacy = legacySchools[id];
-
-  if (legacy?.verified && legacy.active) {
-    return {
-      id: legacy.id,
-      name: legacy.name,
-      email: legacy.email,
-      verified: true,
-      active: true,
-    };
-  }
-
   const school = await getSchoolRecord(id);
 
   if (!school || !school.verified || !school.active) {
@@ -297,8 +285,6 @@ app.get("/schools", (_req, res) => {
 /*
  * Public list used by the mobile app.
  * Only verified + active DynamoDB schools are exposed.
- * Temporary legacy test schools are merged in so the current app
- * keeps functioning during migration.
  */
 app.get("/api/schools", async (_req, res) => {
   try {
@@ -313,27 +299,14 @@ app.get("/api/schools", async (_req, res) => {
       .filter((school) => school.verified === true && school.active === true)
       .map(publicSchool);
 
-    const legacy = Object.values(legacySchools)
-      .filter((school) => school.verified && school.active)
-      .map((school) => ({
-        id: school.id,
-        name: school.name,
-        district: "",
-        city: "",
-        state: "OK",
-        verified: true,
-      }));
+    const schools = dynamoSchools.sort((a, b) =>
+  a.name.localeCompare(b.name),
+);
 
-    const combined = [...legacy, ...dynamoSchools];
-
-    const unique = Array.from(
-      new Map(combined.map((school) => [school.id, school])).values(),
-    ).sort((a, b) => a.name.localeCompare(b.name));
-
-    return res.json({
-      ok: true,
-      schools: unique,
-    });
+   return res.json({
+  ok: true,
+  schools,
+});
   } catch (error) {
     console.error("[LIST SCHOOLS ERROR]", error);
 
