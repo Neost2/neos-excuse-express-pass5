@@ -1,5 +1,4 @@
 import "dotenv/config";
-
 import express, { type Request } from "express";
 import cors from "cors";
 import multer from "multer";
@@ -285,6 +284,10 @@ app.get("/health", (_req, res) => {
     mailMode: process.env.MAIL_MODE || "mock",
     schoolsTable: SCHOOLS_TABLE,
   });
+});
+
+app.get("/", (_req, res) => {
+  res.sendFile(path.join(process.cwd(), "public", "school-register.html"));
 });
 
 app.get("/schools", (_req, res) => {
